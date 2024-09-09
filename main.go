@@ -8,7 +8,8 @@ import (
 
 func main() {
 	reg := registry.NewRegistry()
+	web.BConfig.CopyRequestBody = true
 
-	web.Router("/posts", controllers.NewPostsController(reg))
+	web.Router("/posts", controllers.NewPostsController(&reg))
 	web.Run()
 }

@@ -5,7 +5,7 @@ go 1.22.2
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/beego/bee/v2 v2.1.0 // indirect
-	github.com/beego/beego/v2 v2.3.0 // indirect
+	github.com/beego/beego/v2 v2.3.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cilium/ebpf v0.16.0 // indirect
@@ -20,6 +20,7 @@ require (
 	github.com/go-delve/liner v1.2.3-0.20231231155935-4726ab1d7f62 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
 	github.com/google/go-dap v0.12.0 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/hashicorp/golang-lru v1.0.2 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect

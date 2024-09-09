@@ -1,7 +1,7 @@
 package registry
 
 import (
-	"log"
+	"fmt"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -15,7 +15,7 @@ func NewDB() DB {
 	dsn := "postgresql://postgres:postgres@localhost:5432/ft_dev"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("Postgresに接続できませんでした: %v\n", err)
+		panic(fmt.Sprintf("Postgresに接続できませんでした: %v\n", err))
 	}
 
 	return DB{

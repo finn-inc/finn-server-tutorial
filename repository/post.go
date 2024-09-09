@@ -6,6 +6,13 @@ type Post struct {
 	Body  string
 }
 
+type CreatePostInput struct {
+	Id    string
+	Title string
+	Body  string
+}
+
 type PostRepository interface {
-	Index(int, int) []Post
+	Index(int, int) ([]Post, error)
+	Create(CreatePostInput) error
 }
