@@ -1,23 +1,14 @@
 package main
 
 import (
-	"log"
-
 	"github.com/beego/beego/v2/server/web"
 	"github.com/finn-inc/finn-server-tutorial/controllers"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	"github.com/finn-inc/finn-server-tutorial/registry"
 )
 
 func main() {
-	dsn := "postgresql://postgres:postgres@localhost:15432/ft_dev"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		log.Fatalf("Postgresに接続できませんでした: %v\n", err)
-	}
+	reg := registry.NewRegistry()
 
-	web.Router("/posts", &controllers.PostsController{
-		DB: db,
-	})
+	web.Router("/posts", controllers.NewPostsController(reg))
 	web.Run()
 }

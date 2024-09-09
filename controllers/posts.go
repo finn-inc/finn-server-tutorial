@@ -2,21 +2,27 @@ package controllers
 
 import (
 	"github.com/beego/beego/v2/server/web"
-	"github.com/finn-inc/finn-server-tutorial/services"
+	"github.com/finn-inc/finn-server-tutorial/registry"
+	"github.com/finn-inc/finn-server-tutorial/repository/implements/gorm"
+	"github.com/finn-inc/finn-server-tutorial/usecase"
 	"github.com/finn-inc/finn-server-tutorial/views"
-	"gorm.io/gorm"
 )
+
+func NewPostsController(reg registry.Registry) *PostsController {
+	repo := gorm.NewGormPostsRepository(reg.DB)
+
+	return &PostsController{
+		usecase: usecase.NewPostsUsecase(repo),
+	}
+}
 
 type PostsController struct {
 	web.Controller
-	DB *gorm.DB
+	usecase usecase.PostsUsecase
 }
 
 func (c *PostsController) Get() {
-	s := services.PostsService{
-		DB: c.DB,
-	}
-	posts := s.Index(1, 10)
+	posts := c.usecase.Index()
 
 	v := views.PostsView{}
 
