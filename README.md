@@ -1,5 +1,0 @@
-startup
-
-```
-bee run
-```
