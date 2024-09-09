@@ -32,7 +32,6 @@ type Post struct {
 }
 
 func NewPostsUsecase(r repository.PostRepository) *PostsUsecase {
-	fmt.Printf("new usecase: %+v\n", r)
 	return &PostsUsecase{
 		r: r,
 	}
@@ -58,10 +57,7 @@ func (u *PostsUsecase) Index() ([]Post, error) {
 }
 
 func (u PostsUsecase) Create(input CreatePostInput) error {
-	ni := input.toRepoInput(uuid.New().String())
-	fmt.Printf("here4: %+v\n", u.r)
-
-	if err := u.r.Create(ni); err != nil {
+	if err := u.r.Create(input.toRepoInput(uuid.New().String())); err != nil {
 		return fmt.Errorf("error on create usecase: %v", err)
 	}
 

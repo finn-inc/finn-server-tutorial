@@ -3,7 +3,7 @@ table "posts" {
 
   column "id" {
     null = false
-    type = bigint
+    type = character_varying
   }
   column "title" {
     null = false

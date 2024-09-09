@@ -48,9 +48,8 @@ func (r GormPostsRepository) createInputToModel(input repository.CreatePostInput
 }
 
 func (r GormPostsRepository) Create(input repository.CreatePostInput) error {
-	fmt.Println("create")
 	post := r.createInputToModel(input)
-	res := r.DB.Client.Create(post)
+	res := r.DB.Client.Create(&post)
 	if res.Error != nil {
 		return fmt.Errorf("error on creating post: %v", res.Error)
 	}
