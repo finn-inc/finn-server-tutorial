@@ -27,8 +27,18 @@ func NewPostsController(reg *registry.Registry) *PostsController {
 
 func (c *PostsController) Get() {
 	defer c.ServeJSON()
+	var page int
+	if err := c.Ctx.Input.Bind(&page, "page"); err != nil {
+		c.Data["json"] = map[string]string{
+			"error": fmt.Sprintf("Error on Binding: %s\n", err),
+		}
+		return
+	}
+	if page == 0 {
+		page = 1
+	}
 
-	posts, err := usecase.NewPostsUsecase(gorm.NewGormPostsRepository(&c.Reg.DB)).Index()
+	posts, err := usecase.NewPostsUsecase(gorm.NewGormPostsRepository(&c.Reg.DB)).Index(page)
 	if err != nil {
 		c.Data["json"] = map[string]string{
 			"error": fmt.Sprintf("Error on Get: %s\n", err),
@@ -36,7 +46,7 @@ func (c *PostsController) Get() {
 		return
 	}
 
-	p := presentation.PostsPresentation{}
+	p := presentation.NewPostsPresentation()
 
 	c.Data["json"] = p.Index(posts)
 }

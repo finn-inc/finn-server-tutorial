@@ -12,6 +12,12 @@ type PostsUsecase struct {
 	r repository.PostRepository
 }
 
+func NewPostsUsecase(r repository.PostRepository) *PostsUsecase {
+	return &PostsUsecase{
+		r: r,
+	}
+}
+
 type CreatePostInput struct {
 	Title string
 	Body  string
@@ -31,12 +37,6 @@ type Post struct {
 	Body  string
 }
 
-func NewPostsUsecase(r repository.PostRepository) *PostsUsecase {
-	return &PostsUsecase{
-		r: r,
-	}
-}
-
 func (u PostsUsecase) repoToOutput(post repository.Post) Post {
 	return Post{
 		Id:    post.Id,
@@ -45,8 +45,8 @@ func (u PostsUsecase) repoToOutput(post repository.Post) Post {
 	}
 }
 
-func (u *PostsUsecase) Index() ([]Post, error) {
-	posts, err := u.r.Index(1, 10)
+func (u *PostsUsecase) Index(page int) ([]Post, error) {
+	posts, err := u.r.Index(page, 10)
 	if err != nil {
 		return nil, fmt.Errorf("error on indexing posts: %v", err)
 	}

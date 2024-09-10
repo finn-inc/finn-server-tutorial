@@ -7,6 +7,10 @@ import (
 
 type PostsPresentation struct{}
 
+func NewPostsPresentation() PostsPresentation {
+	return PostsPresentation{}
+}
+
 func (v *PostsPresentation) Index(posts []usecase.Post) map[string]interface{} {
 	return map[string]interface{}{
 		"posts": lo.Associate(posts, func(post usecase.Post) (string, string) {
