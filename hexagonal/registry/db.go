@@ -3,6 +3,7 @@ package registry
 import (
 	"fmt"
 
+	"github.com/finn-inc/finn-server-tutorial/hexagonal/utils"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -12,8 +13,11 @@ type DB struct {
 }
 
 func NewDB() DB {
-	dsn := "postgresql://postgres:postgres@localhost:5432/ft_dev"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	cfg, err := utils.LoadEnv()
+	if err != nil {
+		panic(fmt.Sprintf("環境変数を取得できませんでした: %v\n", err))
+	}
+	db, err := gorm.Open(postgres.Open(cfg.DatabaseURL), &gorm.Config{})
 	if err != nil {
 		panic(fmt.Sprintf("Postgresに接続できませんでした: %v\n", err))
 	}
