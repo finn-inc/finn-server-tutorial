@@ -11,7 +11,7 @@ func NewPostsPresentation() PostsPresentation {
 	return PostsPresentation{}
 }
 
-func (v *PostsPresentation) Index(posts []usecase.Post) map[string]interface{} {
+func (p *PostsPresentation) Index(posts []usecase.Post) map[string]interface{} {
 	return map[string]interface{}{
 		"posts": lo.Associate(posts, func(post usecase.Post) (string, string) {
 			return post.Id, post.Title
@@ -19,7 +19,7 @@ func (v *PostsPresentation) Index(posts []usecase.Post) map[string]interface{} {
 	}
 }
 
-func (v *PostsPresentation) Create() map[string]string {
+func (p *PostsPresentation) Create() map[string]string {
 	return map[string]string{
 		"msg": "ok",
 	}

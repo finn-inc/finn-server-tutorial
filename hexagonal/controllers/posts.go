@@ -27,6 +27,7 @@ func NewPostsController(reg *registry.Registry) *PostsController {
 
 func (c *PostsController) Get() {
 	defer c.ServeJSON()
+
 	var page int
 	if err := c.Ctx.Input.Bind(&page, "page"); err != nil {
 		c.Data["json"] = map[string]string{
