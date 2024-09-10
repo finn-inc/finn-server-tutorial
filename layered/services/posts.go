@@ -30,6 +30,14 @@ type CreatePostInput struct {
 	Body  string
 }
 
+func (i CreatePostInput) toModel() models.Post {
+	return models.Post{
+		Id:    uuid.New().String(),
+		Title: i.Title,
+		Body:  i.Body,
+	}
+}
+
 func (s PostsService) modelToOutput(post models.Post) Post {
 	return Post{
 		Id:    post.Id,
@@ -52,16 +60,8 @@ func (s PostsService) Index(page int) ([]Post, error) {
 	}), nil
 }
 
-func (s PostsService) createInputToModel(input CreatePostInput) models.Post {
-	return models.Post{
-		Id:    uuid.New().String(),
-		Title: input.Title,
-		Body:  input.Body,
-	}
-}
-
 func (s PostsService) Create(input CreatePostInput) error {
-	post := s.createInputToModel(input)
+	post := input.toModel()
 	res := s.client.Create(&post)
 	if res.Error != nil {
 		return fmt.Errorf("error on creating post: %v", res.Error)
