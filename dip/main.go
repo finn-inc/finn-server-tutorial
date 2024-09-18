@@ -8,6 +8,8 @@ import (
 	"github.com/beego/beego/v2/server/web"
 	"github.com/finn-inc/finn-server-tutorial/dip/controllers"
 	"github.com/finn-inc/finn-server-tutorial/dip/registry"
+	"github.com/finn-inc/finn-server-tutorial/dip/repository/implements"
+	"github.com/finn-inc/finn-server-tutorial/dip/usecase"
 	"github.com/finn-inc/finn-server-tutorial/dip/utils"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -33,6 +35,7 @@ func main() {
 		DBConn: dbConn,
 	})
 
-	web.Router("/posts", controllers.NewPostsController(reg))
+	uc := usecase.NewPostsUsecase(implements.NewPostsRepository(reg.DBConn()))
+	web.Router("/posts", controllers.NewPostsController(reg, uc))
 	web.Run()
 }

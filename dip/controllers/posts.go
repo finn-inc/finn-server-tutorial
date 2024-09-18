@@ -6,21 +6,28 @@ import (
 	"strings"
 
 	"github.com/beego/beego/v2/core/validation"
+	"github.com/beego/beego/v2/server/web"
 	"github.com/finn-inc/finn-server-tutorial/dip/presentation"
 	"github.com/finn-inc/finn-server-tutorial/dip/registry"
-	"github.com/finn-inc/finn-server-tutorial/dip/repository/implements"
 	"github.com/finn-inc/finn-server-tutorial/dip/usecase"
 	"github.com/samber/lo"
 )
 
-type PostsController struct {
-	BaseController
+type PostsControllerBase struct {
+	web.Controller
+	reg     registry.Registry
+	usecase *usecase.PostsUsecase
 }
 
-func NewPostsController(reg registry.Registry) *PostsController {
+type PostsController struct {
+	PostsControllerBase
+}
+
+func NewPostsController(reg registry.Registry, usecase *usecase.PostsUsecase) *PostsController {
 	return &PostsController{
-		BaseController: BaseController{
-			reg: reg,
+		PostsControllerBase: PostsControllerBase{
+			reg:     reg,
+			usecase: usecase,
 		},
 	}
 }
@@ -39,7 +46,7 @@ func (c *PostsController) Get() {
 		page = 1
 	}
 
-	posts, err := usecase.NewPostsUsecase(implements.NewPostsRepository(c.reg.DBConn())).Index(page)
+	posts, err := c.usecase.Index(page)
 	if err != nil {
 		c.Data["json"] = map[string]string{
 			"error": fmt.Sprintf("Error on Get: %s\n", err),
@@ -98,7 +105,7 @@ func (c *PostsController) Post() {
 		return
 	}
 
-	if err := usecase.NewPostsUsecase(implements.NewPostsRepository(c.reg.DBConn())).Create(input.toUsecaseInput()); err != nil {
+	if err := c.usecase.Create(input.toUsecaseInput()); err != nil {
 		c.Data["json"] = map[string]string{
 			"error": fmt.Sprintf("Error on Create: %s\n", err),
 		}

@@ -46,7 +46,7 @@ func (u *PostsUsecase) Index(page int) ([]models.Post, error) {
 	return posts, nil
 }
 
-func (u PostsUsecase) Create(input CreatePostInput) error {
+func (u *PostsUsecase) Create(input CreatePostInput) error {
 	post := input.toModel(uuid.New().String())
 	if err := u.r.Save(post); err != nil {
 		return fmt.Errorf("error on create usecase: %v", err)
