@@ -52,7 +52,7 @@ func (s PostsService) Index(page int) ([]Post, error) {
 	var posts []models.Post
 	res := s.client.Limit(pageSize).Offset((page - 1) * pageSize).Find(&posts)
 	if res.Error != nil {
-		return nil, fmt.Errorf("error on getting posts: %v", res.Error)
+		return nil, fmt.Errorf("error on getting posts: %w", res.Error)
 	}
 
 	return lo.Map(posts, func(post models.Post, _ int) Post {
@@ -64,7 +64,7 @@ func (s PostsService) Create(input CreatePostInput) error {
 	post := input.toModel()
 	res := s.client.Create(&post)
 	if res.Error != nil {
-		return fmt.Errorf("error on creating post: %v", res.Error)
+		return fmt.Errorf("error on creating post: %w", res.Error)
 	}
 
 	return nil

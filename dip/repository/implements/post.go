@@ -39,7 +39,7 @@ func (r PostsRepositoryImpl) Index(page int, pageSize int) ([]models.Post, error
 	}
 
 	if res := db.Limit(pageSize).Offset((page - 1) * pageSize).Find(&posts); res.Error != nil {
-		return nil, fmt.Errorf("error on getting posts: %v", res.Error)
+		return nil, fmt.Errorf("error on getting posts: %w", res.Error)
 	}
 
 	return posts, nil
@@ -51,7 +51,7 @@ func (r PostsRepositoryImpl) Save(post models.Post) error {
 		return fmt.Errorf("error on establishingConnection: %w", err)
 	}
 	if res := db.Save(&post); res.Error != nil {
-		return fmt.Errorf("error on creating post: %v", res.Error)
+		return fmt.Errorf("error on creating post: %w", res.Error)
 	}
 
 	return nil

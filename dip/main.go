@@ -23,12 +23,12 @@ func main() {
 	}
 	env, err := utils.LoadEnv()
 	if err != nil {
-		panic(fmt.Sprintf("環境変数を取得できませんでした: %v\n", err))
+		panic(fmt.Errorf("環境変数を取得できませんでした: %w", err))
 	}
 
 	dbConn, err := sql.Open("postgres", env.DatabaseURL)
 	if err != nil {
-		panic(fmt.Sprintf("Postgresに接続できませんでした: %v\n", err))
+		panic(fmt.Errorf("postgresに接続できませんでした: %w", err))
 	}
 
 	reg := registry.NewRegistryImpl(registry.RegistryConfig{

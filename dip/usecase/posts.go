@@ -40,7 +40,7 @@ type Post struct {
 func (u *PostsUsecase) Index(page int) ([]models.Post, error) {
 	posts, err := u.r.Index(page, 10)
 	if err != nil {
-		return nil, fmt.Errorf("error on indexing posts: %v", err)
+		return nil, fmt.Errorf("error on indexing posts: %w", err)
 	}
 
 	return posts, nil
@@ -49,7 +49,7 @@ func (u *PostsUsecase) Index(page int) ([]models.Post, error) {
 func (u *PostsUsecase) Create(input CreatePostInput) error {
 	post := input.toModel(uuid.New().String())
 	if err := u.r.Save(post); err != nil {
-		return fmt.Errorf("error on create usecase: %v", err)
+		return fmt.Errorf("error on create usecase: %w", err)
 	}
 
 	return nil

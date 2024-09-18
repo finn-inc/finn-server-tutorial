@@ -15,11 +15,11 @@ type DB struct {
 func NewDB() DB {
 	cfg, err := utils.LoadEnv()
 	if err != nil {
-		panic(fmt.Sprintf("環境変数を取得できませんでした: %v\n", err))
+		panic(fmt.Errorf("環境変数を取得できませんでした: %w", err))
 	}
 	db, err := gorm.Open(postgres.Open(cfg.DatabaseURL), &gorm.Config{})
 	if err != nil {
-		panic(fmt.Sprintf("Postgresに接続できませんでした: %v\n", err))
+		panic(fmt.Errorf("postgresに接続できませんでした: %w", err))
 	}
 
 	return DB{
