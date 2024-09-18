@@ -1,11 +1,15 @@
 package registry
 
 type Registry struct {
-	DB DB
+	db DB
 }
 
 func NewRegistry() Registry {
 	return Registry{
-		DB: NewDB(),
+		db: NewDB(),
 	}
+}
+
+func (r Registry) DB() DB {
+	return r.db
 }

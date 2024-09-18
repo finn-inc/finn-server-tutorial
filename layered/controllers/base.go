@@ -7,5 +7,5 @@ import (
 
 type BaseController struct {
 	web.Controller
-	Reg *registry.Registry
+	reg *registry.Registry
 }

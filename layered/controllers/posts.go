@@ -19,7 +19,7 @@ type PostsController struct {
 func NewPostsController(reg *registry.Registry) *PostsController {
 	return &PostsController{
 		BaseController: BaseController{
-			Reg: reg,
+			reg: reg,
 		},
 	}
 }
@@ -38,7 +38,7 @@ func (c *PostsController) Get() {
 		page = 1
 	}
 
-	posts, err := services.NewPostsService(c.Reg.DB.Client).Index(page)
+	posts, err := services.NewPostsService(c.reg.DB().Client()).Index(page)
 	if err != nil {
 		c.Data["json"] = map[string]string{
 			"error": fmt.Sprintf("Error on Get: %s\n", err),
@@ -97,7 +97,7 @@ func (c *PostsController) Post() {
 		return
 	}
 
-	if err := services.NewPostsService(c.Reg.DB.Client).Create(input.toServiceInput()); err != nil {
+	if err := services.NewPostsService(c.reg.DB().Client()).Create(input.toServiceInput()); err != nil {
 		c.Data["json"] = map[string]string{
 			"error": fmt.Sprintf("Error on Create: %s\n", err),
 		}

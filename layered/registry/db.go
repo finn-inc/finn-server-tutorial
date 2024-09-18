@@ -9,7 +9,7 @@ import (
 )
 
 type DB struct {
-	Client *gorm.DB
+	client *gorm.DB
 }
 
 func NewDB() DB {
@@ -23,6 +23,10 @@ func NewDB() DB {
 	}
 
 	return DB{
-		Client: db,
+		client: db,
 	}
+}
+
+func (db DB) Client() *gorm.DB {
+	return db.client
 }
