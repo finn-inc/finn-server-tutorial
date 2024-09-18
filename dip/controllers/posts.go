@@ -8,7 +8,7 @@ import (
 	"github.com/beego/beego/v2/core/validation"
 	"github.com/finn-inc/finn-server-tutorial/dip/presentation"
 	"github.com/finn-inc/finn-server-tutorial/dip/registry"
-	"github.com/finn-inc/finn-server-tutorial/dip/repository/implements/gorm"
+	"github.com/finn-inc/finn-server-tutorial/dip/repository/implements"
 	"github.com/finn-inc/finn-server-tutorial/dip/usecase"
 	"github.com/samber/lo"
 )
@@ -17,10 +17,10 @@ type PostsController struct {
 	BaseController
 }
 
-func NewPostsController(reg *registry.Registry) *PostsController {
+func NewPostsController(reg registry.Registry) *PostsController {
 	return &PostsController{
 		BaseController: BaseController{
-			Reg: reg,
+			reg: reg,
 		},
 	}
 }
@@ -39,7 +39,7 @@ func (c *PostsController) Get() {
 		page = 1
 	}
 
-	posts, err := usecase.NewPostsUsecase(gorm.NewGormPostsRepository(&c.Reg.DB)).Index(page)
+	posts, err := usecase.NewPostsUsecase(implements.NewPostsRepository(c.reg.DBConn())).Index(page)
 	if err != nil {
 		c.Data["json"] = map[string]string{
 			"error": fmt.Sprintf("Error on Get: %s\n", err),
@@ -98,7 +98,7 @@ func (c *PostsController) Post() {
 		return
 	}
 
-	if err := usecase.NewPostsUsecase(gorm.NewGormPostsRepository(&c.Reg.DB)).Create(input.toUsecaseInput()); err != nil {
+	if err := usecase.NewPostsUsecase(implements.NewPostsRepository(c.reg.DBConn())).Create(input.toUsecaseInput()); err != nil {
 		c.Data["json"] = map[string]string{
 			"error": fmt.Sprintf("Error on Create: %s\n", err),
 		}

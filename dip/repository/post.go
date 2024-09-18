@@ -1,18 +1,10 @@
 package repository
 
-type Post struct {
-	Id    string
-	Title string
-	Body  string
-}
+import (
+	"github.com/finn-inc/finn-server-tutorial/dip/models"
+)
 
-type CreatePostInput struct {
-	Id    string
-	Title string
-	Body  string
-}
-
-type PostRepository interface {
-	Index(int, int) ([]Post, error)
-	Create(CreatePostInput) error
+type PostsRepository interface {
+	Index(page int, pageSize int) ([]models.Post, error)
+	Save(post models.Post) error
 }

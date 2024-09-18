@@ -1,11 +1,24 @@
 package registry
 
-type Registry struct {
-	DB DB
+import (
+	"database/sql"
+)
+
+type RegistryImpl struct {
+	Registry
+	dbConn *sql.DB
 }
 
-func NewRegistry() Registry {
-	return Registry{
-		DB: NewDB(),
+func (r RegistryImpl) DBConn() *sql.DB {
+	return r.dbConn
+}
+
+type RegistryConfig struct {
+	DBConn *sql.DB
+}
+
+func NewRegistryImpl(cfg RegistryConfig) RegistryImpl {
+	return RegistryImpl{
+		dbConn: cfg.DBConn,
 	}
 }

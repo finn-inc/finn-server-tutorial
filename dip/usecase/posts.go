@@ -3,16 +3,16 @@ package usecase
 import (
 	"fmt"
 
+	"github.com/finn-inc/finn-server-tutorial/dip/models"
 	"github.com/finn-inc/finn-server-tutorial/dip/repository"
 	"github.com/google/uuid"
-	"github.com/samber/lo"
 )
 
 type PostsUsecase struct {
-	r repository.PostRepository
+	r repository.PostsRepository
 }
 
-func NewPostsUsecase(r repository.PostRepository) *PostsUsecase {
+func NewPostsUsecase(r repository.PostsRepository) *PostsUsecase {
 	return &PostsUsecase{
 		r: r,
 	}
@@ -23,8 +23,8 @@ type CreatePostInput struct {
 	Body  string
 }
 
-func (i *CreatePostInput) toRepoInput(id string) repository.CreatePostInput {
-	return repository.CreatePostInput{
+func (i *CreatePostInput) toModel(id string) models.Post {
+	return models.Post{
 		Id:    id,
 		Title: i.Title,
 		Body:  i.Body,
@@ -37,27 +37,18 @@ type Post struct {
 	Body  string
 }
 
-func (u PostsUsecase) repoToOutput(post repository.Post) Post {
-	return Post{
-		Id:    post.Id,
-		Title: post.Title,
-		Body:  post.Body,
-	}
-}
-
-func (u *PostsUsecase) Index(page int) ([]Post, error) {
+func (u *PostsUsecase) Index(page int) ([]models.Post, error) {
 	posts, err := u.r.Index(page, 10)
 	if err != nil {
 		return nil, fmt.Errorf("error on indexing posts: %v", err)
 	}
 
-	return lo.Map(posts, func(post repository.Post, _ int) Post {
-		return u.repoToOutput(post)
-	}), nil
+	return posts, nil
 }
 
 func (u PostsUsecase) Create(input CreatePostInput) error {
-	if err := u.r.Create(input.toRepoInput(uuid.New().String())); err != nil {
+	post := input.toModel(uuid.New().String())
+	if err := u.r.Save(post); err != nil {
 		return fmt.Errorf("error on create usecase: %v", err)
 	}
 
