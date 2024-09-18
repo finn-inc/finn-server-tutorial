@@ -46,7 +46,7 @@ func (c *PostsController) Get() {
 		page = 1
 	}
 
-	posts, err := c.usecase.Index(page)
+	posts, err := c.usecase.IndexPosts(page)
 	if err != nil {
 		c.Data["json"] = map[string]string{
 			"error": fmt.Sprintf("Error on Get: %s\n", err),
@@ -105,7 +105,7 @@ func (c *PostsController) Post() {
 		return
 	}
 
-	if err := c.usecase.Create(input.toUsecaseInput()); err != nil {
+	if err := c.usecase.CreatePost(input.toUsecaseInput()); err != nil {
 		c.Data["json"] = map[string]string{
 			"error": fmt.Sprintf("Error on Create: %s\n", err),
 		}

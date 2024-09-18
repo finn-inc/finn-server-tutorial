@@ -9,12 +9,12 @@ import (
 )
 
 type PostsUsecase struct {
-	r repository.PostsRepository
+	postRepository repository.PostsRepository
 }
 
 func NewPostsUsecase(r repository.PostsRepository) *PostsUsecase {
 	return &PostsUsecase{
-		r: r,
+		postRepository: r,
 	}
 }
 
@@ -37,8 +37,8 @@ type Post struct {
 	Body  string
 }
 
-func (u *PostsUsecase) Index(page int) ([]models.Post, error) {
-	posts, err := u.r.Index(page, 10)
+func (u *PostsUsecase) IndexPosts(page int) ([]models.Post, error) {
+	posts, err := u.postRepository.Index(page, 10)
 	if err != nil {
 		return nil, fmt.Errorf("error on indexing posts: %w", err)
 	}
@@ -46,9 +46,9 @@ func (u *PostsUsecase) Index(page int) ([]models.Post, error) {
 	return posts, nil
 }
 
-func (u *PostsUsecase) Create(input CreatePostInput) error {
+func (u *PostsUsecase) CreatePost(input CreatePostInput) error {
 	post := input.toModel(uuid.New().String())
-	if err := u.r.Save(post); err != nil {
+	if err := u.postRepository.Save(post); err != nil {
 		return fmt.Errorf("error on create usecase: %w", err)
 	}
 
