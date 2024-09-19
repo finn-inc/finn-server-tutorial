@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/finn-inc/finn-server-tutorial/dip/models"
+	"github.com/finn-inc/finn-server-tutorial/dip/repository"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -25,13 +26,13 @@ func (r PostsRepositoryImpl) getClient() (*gorm.DB, error) {
 	return db, nil
 }
 
-func NewPostsRepository(dbConn *sql.DB) PostsRepositoryImpl {
-	return PostsRepositoryImpl{
+func NewPostsRepository(dbConn *sql.DB) repository.PostsRepository {
+	return &PostsRepositoryImpl{
 		dbConn: dbConn,
 	}
 }
 
-func (r PostsRepositoryImpl) Index(page int, pageSize int) ([]models.Post, error) {
+func (r *PostsRepositoryImpl) Index(page int, pageSize int) ([]models.Post, error) {
 	var posts []models.Post
 	db, err := r.getClient()
 	if err != nil {
@@ -45,7 +46,7 @@ func (r PostsRepositoryImpl) Index(page int, pageSize int) ([]models.Post, error
 	return posts, nil
 }
 
-func (r PostsRepositoryImpl) Save(post models.Post) error {
+func (r *PostsRepositoryImpl) Save(post models.Post) error {
 	db, err := r.getClient()
 	if err != nil {
 		return fmt.Errorf("error on establishingConnection: %w", err)

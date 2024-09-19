@@ -2,23 +2,27 @@ package registry
 
 import (
 	"database/sql"
+	"fmt"
+
+	"github.com/finn-inc/finn-server-tutorial/dip/config"
 )
 
-type RegistryImpl struct {
+type registry struct {
 	Registry
 	dbConn *sql.DB
 }
 
-func (r RegistryImpl) DBConn() *sql.DB {
+func (r registry) DBConn() *sql.DB {
 	return r.dbConn
 }
 
-type RegistryConfig struct {
-	DBConn *sql.DB
-}
-
-func NewRegistryImpl(cfg RegistryConfig) RegistryImpl {
-	return RegistryImpl{
-		dbConn: cfg.DBConn,
+func NewRegistryImpl(env config.Env) (*registry, error) {
+	dbConn, err := sql.Open("postgres", env.DatabaseURL)
+	if err != nil {
+		return nil, fmt.Errorf("postgresに接続できませんでした: %w", err)
 	}
+
+	return &registry{
+		dbConn: dbConn,
+	}, nil
 }
