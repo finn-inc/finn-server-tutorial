@@ -112,7 +112,7 @@ func (c *PostsController) Post() {
 		return
 	}
 
-	p := presentation.PostsPresentation{}
+	p := presentation.NewPostsPresentation()
 
 	c.Data["json"] = p.Create()
 }

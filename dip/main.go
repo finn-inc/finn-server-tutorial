@@ -12,7 +12,6 @@ import (
 	"github.com/finn-inc/finn-server-tutorial/dip/usecase"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
-	"github.com/samber/lo"
 )
 
 func main() {
@@ -26,7 +25,7 @@ func main() {
 		panic(fmt.Errorf("環境変数を取得できませんでした: %w", err))
 	}
 
-	reg, err := registry.NewRegistryImpl(lo.FromPtr(env))
+	reg, err := registry.NewRegistryImpl(env)
 	if err != nil {
 		panic(fmt.Errorf("registryの初期化に失敗しました: %w", err))
 	}
