@@ -13,8 +13,12 @@ func NewPostsPresentation() PostsPresentation {
 
 func (p PostsPresentation) Index(posts []models.Post) map[string]interface{} {
 	return map[string]interface{}{
-		"posts": lo.Associate(posts, func(post models.Post) (string, string) {
-			return post.Id, post.Title
+		"posts": lo.Map(posts, func(post models.Post, _ int) map[string]interface{} {
+			return map[string]interface{}{
+				"id":    post.Id,
+				"title": post.Title,
+				"body":  post.Body,
+			}
 		}),
 	}
 }

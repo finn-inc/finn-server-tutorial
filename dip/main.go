@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/beego/beego/v2/server/web"
+	"github.com/beego/beego/v2/server/web/filter/cors"
 	"github.com/finn-inc/finn-server-tutorial/dip/config"
 	"github.com/finn-inc/finn-server-tutorial/dip/controllers"
 	"github.com/finn-inc/finn-server-tutorial/dip/registry"
@@ -16,6 +17,14 @@ import (
 
 func main() {
 	web.BConfig.CopyRequestBody = true
+
+	web.InsertFilter("*", web.BeforeRouter, cors.Allow(&cors.Options{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST"},
+		AllowHeaders:     []string{"*"},
+		ExposeHeaders:    []string{"*"},
+		AllowCredentials: true,
+	}))
 
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file")
