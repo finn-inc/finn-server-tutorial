@@ -12,7 +12,7 @@ type registry struct {
 	dbConn *sql.DB
 }
 
-func (r registry) DBConn() *sql.DB {
+func (r *registry) DBConn() *sql.DB {
 	return r.dbConn
 }
 
