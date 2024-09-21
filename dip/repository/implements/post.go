@@ -11,35 +11,25 @@ import (
 )
 
 type PostsRepositoryImpl struct {
-	dbConn *sql.DB
+	db *gorm.DB
 }
 
-func (r PostsRepositoryImpl) getClient() (*gorm.DB, error) {
+func NewPostsRepository(dbConn *sql.DB) (repository.PostsRepository, error) {
 	db, err := gorm.Open(postgres.New(postgres.Config{
-		Conn: r.dbConn,
+		Conn: dbConn,
 	}), &gorm.Config{})
-
 	if err != nil {
 		return nil, err
 	}
 
-	return db, nil
-}
-
-func NewPostsRepository(dbConn *sql.DB) repository.PostsRepository {
 	return &PostsRepositoryImpl{
-		dbConn: dbConn,
-	}
+		db: db,
+	}, nil
 }
 
 func (r *PostsRepositoryImpl) Index(page int, pageSize int) ([]models.Post, error) {
 	var posts []models.Post
-	db, err := r.getClient()
-	if err != nil {
-		return nil, fmt.Errorf("error on establishingConnection: %w", err)
-	}
-
-	if res := db.Limit(pageSize).Offset((page - 1) * pageSize).Find(&posts); res.Error != nil {
+	if res := r.db.Limit(pageSize).Offset((page - 1) * pageSize).Find(&posts); res.Error != nil {
 		return nil, fmt.Errorf("error on getting posts: %w", res.Error)
 	}
 
@@ -47,11 +37,7 @@ func (r *PostsRepositoryImpl) Index(page int, pageSize int) ([]models.Post, erro
 }
 
 func (r *PostsRepositoryImpl) Save(post models.Post) error {
-	db, err := r.getClient()
-	if err != nil {
-		return fmt.Errorf("error on establishingConnection: %w", err)
-	}
-	if res := db.Save(&post); res.Error != nil {
+	if res := r.db.Save(&post); res.Error != nil {
 		return fmt.Errorf("error on creating post: %w", res.Error)
 	}
 

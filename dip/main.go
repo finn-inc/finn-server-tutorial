@@ -39,7 +39,12 @@ func main() {
 		panic(fmt.Errorf("registryの初期化に失敗しました: %w", err))
 	}
 
-	uc := usecase.NewPostsUsecase(implements.NewPostsRepository(reg.DBConn()))
+	postsRepository, err := implements.NewPostsRepository(reg.DBConn())
+	if err != nil {
+		panic(fmt.Errorf("データベースクライアントの初期化に失敗しました: %w", err))
+	}
+
+	uc := usecase.NewPostsUsecase(postsRepository)
 	web.Router("/posts", controllers.NewPostsController(reg, uc))
 	web.Run()
 }

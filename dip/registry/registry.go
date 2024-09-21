@@ -16,7 +16,7 @@ func (r *registry) DBConn() *sql.DB {
 	return r.dbConn
 }
 
-func NewRegistryImpl(env *config.Env) (*registry, error) {
+func NewRegistryImpl(env *config.Env) (Registry, error) {
 	dbConn, err := sql.Open("postgres", env.DatabaseURL)
 	if err != nil {
 		return nil, fmt.Errorf("postgresに接続できませんでした: %w", err)
