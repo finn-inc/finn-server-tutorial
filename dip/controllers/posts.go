@@ -54,9 +54,7 @@ func (c *PostsController) Get() {
 		return
 	}
 
-	p := presentation.NewPostsPresentation()
-
-	c.Data["json"] = p.Index(posts)
+	c.Data["json"] = presentation.NewIndexPostsResponse(posts)
 }
 
 type post struct {
@@ -112,7 +110,5 @@ func (c *PostsController) Post() {
 		return
 	}
 
-	p := presentation.NewPostsPresentation()
-
-	c.Data["json"] = p.Create()
+	c.Data["json"] = presentation.NewCreatePostResponse()
 }

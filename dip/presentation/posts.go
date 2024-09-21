@@ -5,13 +5,7 @@ import (
 	"github.com/samber/lo"
 )
 
-type PostsPresentation struct{}
-
-func NewPostsPresentation() PostsPresentation {
-	return PostsPresentation{}
-}
-
-func (p PostsPresentation) Index(posts []models.Post) map[string]interface{} {
+func NewIndexPostsResponse(posts []models.Post) map[string]interface{} {
 	return map[string]interface{}{
 		"posts": lo.Map(posts, func(post models.Post, _ int) map[string]interface{} {
 			return map[string]interface{}{
@@ -23,7 +17,7 @@ func (p PostsPresentation) Index(posts []models.Post) map[string]interface{} {
 	}
 }
 
-func (p PostsPresentation) Create() map[string]string {
+func NewCreatePostResponse() map[string]string {
 	return map[string]string{
 		"msg": "ok",
 	}
