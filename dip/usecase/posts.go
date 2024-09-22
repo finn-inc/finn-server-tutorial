@@ -31,12 +31,6 @@ func (i *CreatePostInput) toModel(id string) models.Post {
 	}
 }
 
-type Post struct {
-	Id    string
-	Title string
-	Body  string
-}
-
 func (u *PostsUsecase) IndexPosts(page int) ([]models.Post, error) {
 	posts, err := u.postRepository.Index(page, 10)
 	if err != nil {
