@@ -5,7 +5,6 @@ import (
 
 	"github.com/finn-inc/finn-server-tutorial/dip/models"
 	"github.com/finn-inc/finn-server-tutorial/dip/repository"
-	"github.com/google/uuid"
 )
 
 type PostsUsecase struct {
@@ -41,7 +40,10 @@ func (u *PostsUsecase) IndexPosts(page int) ([]models.Post, error) {
 }
 
 func (u *PostsUsecase) CreatePost(input CreatePostInput) error {
-	post := input.toModel(uuid.New().String())
+	post := models.NewPost(models.NewPostInput{
+		Title: input.Title,
+		Body:  input.Body,
+	})
 	if err := u.postRepository.Save(post); err != nil {
 		return fmt.Errorf("error on create usecase: %w", err)
 	}

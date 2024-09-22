@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/beego/beego/v2/server/web"
 	"github.com/beego/beego/v2/server/web/filter/cors"
@@ -11,7 +10,6 @@ import (
 	"github.com/finn-inc/finn-server-tutorial/dip/registry"
 	"github.com/finn-inc/finn-server-tutorial/dip/repository/implements"
 	"github.com/finn-inc/finn-server-tutorial/dip/usecase"
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
@@ -26,9 +24,6 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	if err := godotenv.Load(); err != nil {
-		log.Fatal("Error loading .env file")
-	}
 	env, err := config.LoadEnv()
 	if err != nil {
 		panic(fmt.Errorf("環境変数を取得できませんでした: %w", err))

@@ -8,7 +8,6 @@ import (
 )
 
 type registry struct {
-	Registry
 	dbConn *sql.DB
 }
 
